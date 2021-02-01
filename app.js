@@ -9,14 +9,15 @@ var cors = require('cors')
 
 var ngrokFront = process.env.REACT_APP_ngrokFront
 
-/*
-module.exports = {
-    webpack: (config) => {
-      const env = {  };
-      config.plugins.push(new webpack.DefinePlugin(env));
-      return config;
-    },
-  }*/
+
+ 
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+ 
+// POST /login gets urlencoded bodies
+/*app.post('/login', urlencodedParser, function (req, res) {
+  res.send('welcome, ' + req.body.username)
+})*/
 
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -50,10 +51,29 @@ console.log(process.env.dbpassword);
   });
 
 
+   /* 
+     * 1. query profile Model for the specific profile
+     * 2. make sure to check if foundProfile is undefined or not.
+     * 3. update profile with body
+     * 4. Catch on errors
+     */
+ /*   router.put('/api/profile/:id', (req, res, next) => {
+      Profile.findbyId(req.params.id)
+         .then(foundProfile => foundProfile.update(req.body))  
+         .catch(next);
+  })*/
+
+
+
+//router.put('/handle', urlencodedParser, cors(), (req, res, next) => {
 router.put('/handle', cors(), (req, res, next) => {
     //code to perform particular action.
     //To access POST variable use req.body()methods.
+    console.log("PUTT")
+    //permet de récupérer le body
     console.log(req.body);
+    //permet de recuperer les request params
+    console.log(req.query)
 
 
   /*  con.query("SELECT * FROM orders", function (err, result, fields) {
