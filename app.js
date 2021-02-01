@@ -81,7 +81,7 @@ router.put('/handle', cors(), (req, res, next) => {
         console.log(result);
     });*/
 
-      var sql = "UPDATE orders SET order_state = 2 WHERE order_id=1";
+      var sql = "UPDATE orders SET order_state ="+ req.body.order_state +" WHERE order_id="+req.query.id;
       con.query(sql, function (err, result) {
         if (err) throw err;
         console.log(result.affectedRows + " record(s) updated");
