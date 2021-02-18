@@ -32,6 +32,7 @@ app.use(function(req, res, next) {
   });
 
   app.options('/handle', cors())
+  app.options('/getStateOrder', cors())
 
 
 var mysql = require('mysql');
@@ -50,22 +51,13 @@ console.log(process.env.dbpassword);
     console.log("Connected!");
   });
 
-
-   /* 
-     * 1. query profile Model for the specific profile
-     * 2. make sure to check if foundProfile is undefined or not.
-     * 3. update profile with body
-     * 4. Catch on errors
-     */
- /*   router.put('/api/profile/:id', (req, res, next) => {
-      Profile.findbyId(req.params.id)
-         .then(foundProfile => foundProfile.update(req.body))  
-         .catch(next);
-  })*/
+  // add router in the Express app.
+app.use("/", router);
 
 
+app.get('/', (req, res) => res.send('Hello World'));
 
-//router.put('/handle', urlencodedParser, cors(), (req, res, next) => {
+
 router.put('/handle', cors(), (req, res, next) => {
     //code to perform particular action.
     //To access POST variable use req.body()methods.
@@ -87,53 +79,70 @@ router.put('/handle', cors(), (req, res, next) => {
         console.log(result.affectedRows + " record(s) updated");
       });
       res.send('this is an update')
-
-    /*  con.query("SELECT * FROM orders", function (err, result, fields) {
-          if (err) throw err;
-          console.log(result);
-      });*/
 });
 
-// add router in the Express app.
-app.use("/", router);
+router.get('/getStateOrder', cors(), (req, res, next) => {
+      console.log("res!")
+      console.log(res)
+      var resultat;
+      var a = 'something'
+
+      con.query("SELECT * FROM orders", function (err, result, fields) {
+        if (err) {throw err};
+        if(err){ return next(err) };
+        //console.log(result);
+        //console.log(result[1].order_state);
+        resultat = result;
+        //console.log('result')
+        //console.log(result)
+        var obj = result // or something
+        console.log('obj')
+        console.log(obj)
+
+        res.myObj = obj;
+        console.log('obj dans pu callback')
+        console.log(obj)
+        res.send(resultat)
+      });
+        
+        //next();
+      });
 
 
-app.get('/', (req, res) => res.send('Hello World'));
 
-
-
+/* 
 function getStateOrderdb(id, callback){
 
     con.query("SELECT * FROM orders", function (err, result, fields) {
         if (err) throw err;
-        console.log(result);
-        console.log(result[1].order_state);
+        //console.log(result);
+        //console.log(result[1].order_state);
         resultat = result;
         if(err){ return callback(err) };
-        console.log('result')
-        console.log(result)
+        //console.log('result')
+        //console.log(result)
         var obj = result // or something
         console.log('obj')
         console.log(obj)
-      callback(null, obj)
+        callback(null, obj)
     });
   };
-  
 
-
-app.get('/getStateOrder', (req, res) => {
-        console.log("Connected!")
+router.get('/getStateOrder', cors(), (req, res, next) => {
+        console.log("res!")
+        console.log(res)
         var resultat;
-
-        getStateOrderdb('something', function(err, obj){
+        var a = 'something'
+        getStateOrderdb(a, function(err, obj){
             if(err){ return next(err) };
             res.myObj = obj;
             console.log('obj dans callback')
             console.log(obj)
             res.send(obj)
-           // next();
+            next();
           });
 
-});
+});*/
+
 
 app.listen(port, () => console.log(`exampe port ${port}`))
